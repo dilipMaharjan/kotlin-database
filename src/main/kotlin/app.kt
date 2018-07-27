@@ -1,4 +1,9 @@
-import java.sql.Connection
+import jooq.Public.PUBLIC
+import jooq.Tables.AUTHORS
+import jooq.tables.Authors
+import org.jooq.DSLContext
+import org.jooq.SQLDialect
+import org.jooq.impl.DSL
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.sql.Statement
@@ -9,9 +14,21 @@ import java.sql.Statement
  */
 
 fun stmt(): Statement? {
+
     try {
         Class.forName("org.sqlite.JDBC")
         return DriverManager.getConnection("jdbc:sqlite:blog.sqlite").createStatement()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return null
+}
+
+fun dslContext(): DSLContext? {
+    try {
+        Class.forName("org.sqlite.JDBC")
+        val conn = DriverManager.getConnection("jdbc:sqlite:blog.sqlite")
+        return DSL.using(conn, SQLDialect.SQLITE)
     } catch (e: Exception) {
         e.printStackTrace()
     }
@@ -47,8 +64,7 @@ fun deleteAll(stmt: Statement) {
     stmt.execute("DELETE FROM authors")
 }
 
-fun main(args: Array<String>) {
-
+fun jdbc() {
     val stmt = stmt()
 
     stmt?.apply {
@@ -72,5 +88,15 @@ fun main(args: Array<String>) {
 //        delete(stmt, 1)
         update(stmt, 5, "Dilip")
 //        deleteAll(stmt)
+    }
+}
+
+fun main(args: Array<String>) {
+    val dslContext = dslContext()
+    dslContext?.apply {
+        val result = dslContext.select().from("authors").fetch()
+        for (record in result) {
+            println(record.getValue("name"))
+        }
     }
 }
