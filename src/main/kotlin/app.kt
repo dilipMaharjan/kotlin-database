@@ -1,28 +1,14 @@
-import jooq.Public.PUBLIC
-import jooq.Tables.AUTHORS
-import jooq.tables.Authors
 import org.jooq.DSLContext
+import org.jooq.Record
+import org.jooq.Result
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.Statement
 
 
 /**
  * Created by Dilip Maharjan on 26/07/2018
  */
-
-fun stmt(): Statement? {
-
-    try {
-        Class.forName("org.sqlite.JDBC")
-        return DriverManager.getConnection("jdbc:sqlite:blog.sqlite").createStatement()
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return null
-}
 
 fun dslContext(): DSLContext? {
     try {
@@ -35,68 +21,46 @@ fun dslContext(): DSLContext? {
     return null
 }
 
-fun insert(stmt: Statement, value: String) {
-    stmt.execute("INSERT INTO authors(name)values(\"$value\")")
-
+fun insert(dslContext: DSLContext): Int {
+    return dslContext.execute("INSERT INTO authors(name)values(\"Philip\")")
 }
 
-fun createTable(stmt: Statement, sql: String) {
-    stmt.execute(sql)
+fun getAuthors(dslContext: DSLContext): Result<Record> {
+    return dslContext.select().from("authors").fetch()
 }
 
-fun getAuthor(stmt: Statement, sql: String): ResultSet {
-    return stmt.executeQuery(sql)
+fun getAuthor(dslContext: DSLContext, id: Int): Result<Record> {
+    return dslContext.select().from("authors").where("id=$id").fetch()
 }
 
-fun findById(stmt: Statement, id: Int): ResultSet {
-    return stmt.executeQuery("SELECT * FROM authors where id=$id")
+fun update(dslContext: DSLContext, id: Int, value: String): Int {
+    return dslContext.execute("UPDATE authors set name=\"$value\" where id=$id")
 }
 
-fun delete(stmt: Statement, id: Int) {
-    stmt.execute("DELETE FROM authors where id=$id")
-}
-
-fun update(stmt: Statement, id: Int, author_name: String) {
-    stmt.executeUpdate("UPDATE authors set name=\"$author_name\" WHERE id=$id")
-}
-
-fun deleteAll(stmt: Statement) {
-    stmt.execute("DELETE FROM authors")
-}
-
-fun jdbc() {
-    val stmt = stmt()
-
-    stmt?.apply {
-
-        createTable(stmt, "CREATE TABLE  if not exists authors(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)")
-
-
-        insert(stmt, "Dilip")
-
-        val authors = getAuthor(stmt, "SELECT * from authors")
-
-        while (authors.next()) {
-            println(authors.getString("name"))
-        }
-
-        val author = findById(stmt, 5)
-        while (author.next()) {
-            println("Author name is : ${author.getString("name")}")
-        }
-
-//        delete(stmt, 1)
-        update(stmt, 5, "Dilip")
-//        deleteAll(stmt)
-    }
+fun delete(dslContext: DSLContext, id: Int): Int {
+    return dslContext.execute("DELETE FROM authors WHERE id=$id")
 }
 
 fun main(args: Array<String>) {
     val dslContext = dslContext()
     dslContext?.apply {
-        val result = dslContext.select().from("authors").fetch()
-        for (record in result) {
+        //        insert(dslContext)
+        val authors = getAuthors(dslContext)
+        for (record in authors) {
             println(record.getValue("name"))
         }
+
+        val author = getAuthor(dslContext, 1)
+        for (record in author) {
+            println("Author with id ${record.getValue("id")} is ${record.getValue("name")}")
+        }
+        if (update(dslContext, 3, "Max") == 1) {
+            println("Success")
+        }
+
+        if (delete(dslContext, 2) == 1) {
+            println("Deleted")
+        }
     }
+
 }
