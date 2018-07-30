@@ -8,8 +8,10 @@ import javax.annotation.Generated;
 
 import jooq.tables.Articles;
 import jooq.tables.Authors;
+import jooq.tables.Test;
 import jooq.tables.records.ArticlesRecord;
 import jooq.tables.records.AuthorsRecord;
+import jooq.tables.records.TestRecord;
 
 import org.jooq.Identity;
 import org.jooq.UniqueKey;
@@ -36,6 +38,7 @@ public class Keys {
 
     public static final Identity<ArticlesRecord, Integer> IDENTITY_ARTICLES = Identities0.IDENTITY_ARTICLES;
     public static final Identity<AuthorsRecord, Integer> IDENTITY_AUTHORS = Identities0.IDENTITY_AUTHORS;
+    public static final Identity<TestRecord, Integer> IDENTITY_TEST = Identities0.IDENTITY_TEST;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -43,6 +46,7 @@ public class Keys {
 
     public static final UniqueKey<ArticlesRecord> PK_ARTICLES = UniqueKeys0.PK_ARTICLES;
     public static final UniqueKey<AuthorsRecord> PK_AUTHORS = UniqueKeys0.PK_AUTHORS;
+    public static final UniqueKey<TestRecord> PK_TEST = UniqueKeys0.PK_TEST;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -56,10 +60,12 @@ public class Keys {
     private static class Identities0 {
         public static Identity<ArticlesRecord, Integer> IDENTITY_ARTICLES = Internal.createIdentity(Articles.ARTICLES, Articles.ARTICLES.ID);
         public static Identity<AuthorsRecord, Integer> IDENTITY_AUTHORS = Internal.createIdentity(Authors.AUTHORS, Authors.AUTHORS.ID);
+        public static Identity<TestRecord, Integer> IDENTITY_TEST = Internal.createIdentity(Test.TEST, Test.TEST.ID);
     }
 
     private static class UniqueKeys0 {
         public static final UniqueKey<ArticlesRecord> PK_ARTICLES = Internal.createUniqueKey(Articles.ARTICLES, "pk_articles", Articles.ARTICLES.ID);
         public static final UniqueKey<AuthorsRecord> PK_AUTHORS = Internal.createUniqueKey(Authors.AUTHORS, "pk_authors", Authors.AUTHORS.ID);
+        public static final UniqueKey<TestRecord> PK_TEST = Internal.createUniqueKey(Test.TEST, "pk_test", Test.TEST.ID);
     }
 }

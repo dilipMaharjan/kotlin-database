@@ -13,6 +13,7 @@ import javax.annotation.Generated;
 import jooq.tables.Articles;
 import jooq.tables.Authors;
 import jooq.tables.SqliteSequence;
+import jooq.tables.Test;
 
 import org.jooq.Catalog;
 import org.jooq.Table;
@@ -32,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultSchema extends SchemaImpl {
 
-    private static final long serialVersionUID = -176305301;
+    private static final long serialVersionUID = 1874120938;
 
     /**
      * The reference instance of <code></code>
@@ -53,6 +54,11 @@ public class DefaultSchema extends SchemaImpl {
      * The table <code>sqlite_sequence</code>.
      */
     public final SqliteSequence SQLITE_SEQUENCE = jooq.tables.SqliteSequence.SQLITE_SEQUENCE;
+
+    /**
+     * The table <code>test</code>.
+     */
+    public final Test TEST = jooq.tables.Test.TEST;
 
     /**
      * No further instances allowed
@@ -81,6 +87,7 @@ public class DefaultSchema extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Articles.ARTICLES,
             Authors.AUTHORS,
-            SqliteSequence.SQLITE_SEQUENCE);
+            SqliteSequence.SQLITE_SEQUENCE,
+            Test.TEST);
     }
 }

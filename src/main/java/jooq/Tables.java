@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 import jooq.tables.Articles;
 import jooq.tables.Authors;
 import jooq.tables.SqliteSequence;
+import jooq.tables.Test;
 
 
 /**
@@ -38,4 +39,9 @@ public class Tables {
      * The table <code>sqlite_sequence</code>.
      */
     public static final SqliteSequence SQLITE_SEQUENCE = jooq.tables.SqliteSequence.SQLITE_SEQUENCE;
+
+    /**
+     * The table <code>test</code>.
+     */
+    public static final Test TEST = jooq.tables.Test.TEST;
 }

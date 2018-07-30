@@ -1,3 +1,5 @@
+import groovy.sql.Sql
+
 buildscript {
     ext.kotlin_version = '1.2.41'
     ext.sqlite_jdbc = '3.7.2'
@@ -10,6 +12,7 @@ buildscript {
         classpath group: 'org.jooq', name: 'jooq-meta-extensions', version: '3.11.2'
         classpath 'org.jooq:jooq-codegen:3.11.2'
         classpath 'org.xerial:sqlite-jdbc:3.7.2'
+
     }
 }
 
@@ -64,7 +67,7 @@ jooq {
         generator {
             database {
                 name = 'org.jooq.meta.sqlite.SQLiteDatabase'
-     }
+            }
             generate {
                 pojos = true
                 daos = true
@@ -78,3 +81,17 @@ jooq {
         }
     }
 }
+
+configurations { driver }
+
+dependencies { driver 'org.xerial:sqlite-jdbc:3.7.2' }
+
+URLClassLoader loader = GroovyObject.class.classLoader
+configurations.driver.each { File file ->
+    loader.addURL(file.toURL())
+}
+
+Sql sql = Sql.newInstance('jdbc:sqlite:test.db', "org.sqlite.JDBC")
+
+sql.execute('CREATE TABLE IF NOT EXISTS users(id INTEGER,name TEXT)')
+sql.close()
