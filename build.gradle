@@ -59,23 +59,12 @@ jooq {
     blog(sourceSets.main) {
         jdbc {
             driver = 'org.sqlite.JDBC'
-            url = 'jdbc:sqlite:blog.sqlite'
+            url = 'jdbc:sqlite:blog'
         }
         generator {
             database {
-                inputSchema='PUBLIC'
-                name = 'org.jooq.meta.extensions.ddl.DDLDatabase'
-                properties {
-                    property {
-                        key = 'scripts'
-                        value = 'src/main/resources/blog.sql'
-                    }
-                    property {
-                        key = 'sort'
-                        value = 'semantic'
-                    }
-                }
-            }
+                name = 'org.jooq.meta.sqlite.SQLiteDatabase'
+     }
             generate {
                 pojos = true
                 daos = true
